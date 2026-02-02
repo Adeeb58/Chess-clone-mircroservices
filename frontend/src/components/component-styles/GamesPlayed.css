@@ -1,0 +1,54 @@
+.games-played-container {
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+    color: white;
+    /* Assuming dark theme */
+    gap: 15px;
+    background-color: #262421;
+    height: 100%;
+}
+
+.stats-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+}
+
+.stat-box {
+    background-color: #302e2b;
+    padding: 15px;
+    border-radius: 5px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid #403d39;
+}
+
+.stat-value {
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+.stat-label {
+    font-size: 0.9rem;
+    color: #bbb;
+    text-transform: uppercase;
+}
+
+.win {
+    color: #81b64c;
+}
+
+/* Green */
+.loss {
+    color: #cc3333;
+}
+
+/* Red */
+.draw {
+    color: #a3a3a3;
+}
+
+/* Grey */

@@ -1,0 +1,102 @@
+services:
+  # MySQL for User Service
+  mysql-users:
+    image: mysql:8.0
+    container_name: indichess-mysql-users
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: indichess_users
+    ports:
+      - "3307:3306"
+    volumes:
+      - mysql-users-data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - indichess-network
+
+  # MySQL for Match Service
+  mysql-matches:
+    image: mysql:8.0
+    container_name: indichess-mysql-matches
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: indichess_matches
+    ports:
+      - "3308:3306"
+    volumes:
+      - mysql-matches-data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - indichess-network
+
+  # User Service
+  user-service:
+    build: ./user-service
+    container_name: indichess-user-service
+    environment:
+      MYSQL_HOST: mysql-users
+      MYSQL_PORT: 3306
+      MYSQL_USER: root
+      MYSQL_PASSWORD: root
+      JWT_SECRET: mySecretKeyForJWTTokenGenerationThatIsAtLeast256BitsLong
+    ports:
+      - "8081:8081"
+    depends_on:
+      mysql-users:
+        condition: service_healthy
+    networks:
+      - indichess-network
+
+  # Match Service
+  match-service:
+    build: ./match-service
+    container_name: indichess-match-service
+    environment:
+      MYSQL_HOST: mysql-matches
+      MYSQL_PORT: 3306
+      MYSQL_USER: root
+      MYSQL_PASSWORD: root
+      JWT_SECRET: mySecretKeyForJWTTokenGenerationThatIsAtLeast256BitsLong
+      USER_SERVICE_URL: http://user-service:8081
+    ports:
+      - "8082:8082"
+    depends_on:
+      mysql-matches:
+        condition: service_healthy
+      user-service:
+        condition: service_started
+    networks:
+      - indichess-network
+
+  # API Gateway
+  api-gateway:
+    build: ./api-gateway
+    container_name: indichess-api-gateway
+    environment:
+      JWT_SECRET: mySecretKeyForJWTTokenGenerationThatIsAtLeast256BitsLong
+      USER_SERVICE_URL: http://user-service:8081
+      MATCH_SERVICE_URL: http://match-service:8082
+      MATCH_SERVICE_WS_URL: ws://match-service:8082
+    ports:
+      - "8080:8080"
+    depends_on:
+      - user-service
+      - match-service
+    networks:
+      - indichess-network
+
+volumes:
+  mysql-users-data:
+  mysql-matches-data:
+
+networks:
+  indichess-network:
+    driver: bridge

@@ -1,0 +1,90 @@
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
+
+function LoginCard({ handleToggleSignup }) {
+  const navigate = useNavigate();
+  const { login } = useAuth();
+
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  const handleLogin = async (e) => {
+    e.preventDefault();
+    setError("");
+    setLoading(true);
+
+    try {
+      const result = await login(username, password);
+
+      if (result.success) {
+        navigate("/home");
+      } else {
+        setError(result.message || "Invalid username or password");
+      }
+    } catch (err) {
+      setError("An unexpected error occurred. Please try again.");
+      console.error("Login error:", err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <div className="login-card">
+      <h2>Login</h2>
+
+      <form onSubmit={handleLogin}>
+        <div className="input-group">
+          <label htmlFor="username">Username</label>
+          <input
+            type="text"
+            id="username"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+            placeholder="Enter your username"
+            required
+            disabled={loading}
+          />
+        </div>
+
+        <div className="input-group">
+          <label htmlFor="password">Password</label>
+          <input
+            type="password"
+            id="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            placeholder="Enter your password"
+            required
+            disabled={loading}
+          />
+        </div>
+
+        {error && <p className="error-message">{error}</p>}
+
+        <button type="submit" className="simple-auth-btn" disabled={loading}>
+          {loading ? "Logging in..." : "Login"}
+        </button>
+      </form>
+
+      <div className="oauth-buttons">
+        <a href="http://localhost:8080/oauth2/authorization/google">
+          <button className="btn-google">Login with Google</button>
+        </a>
+        <a href="http://localhost:8080/oauth2/authorization/github">
+          <button className="btn-github">Login with GitHub</button>
+        </a>
+      </div>
+
+      <div className="signup-link">
+        Not an existing user?
+        <button className="simple-auth-btn" onClick={handleToggleSignup}>Sign up here</button>
+      </div>
+    </div>
+  );
+}
+
+export default LoginCard;

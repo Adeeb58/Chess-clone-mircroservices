@@ -1,0 +1,334 @@
+:root {
+    --boardWidth: 65vh;
+    --boardHeight: 65vh;
+    --boardContainerWidth: 65vh;
+    --gutter: 1.6rem;
+    --gutterSmall: 0.8rem;
+    --boardControlsWidth: 3rem;
+    --boardControlsHeight: 100%;
+    --evalWidth: 2rem;
+    --evalAndGutter: 2rem;
+    --piecesWidth: 3rem;
+    --playerHeight: 4.5rem;
+    --sidebarMinHeight: 400px;
+    --gutterBoardToTopPlayer: var(--gutterSmall);
+    --gutterBoardToBottomPlayer: var(--gutterSmall);
+    --bodyBoardGutterX: 2rem;
+    --bodyPeripheralsGutterX: 2rem;
+    --100vw: 100vw;
+    --chessboard-rounded-radius: 3px;
+    --evalTransform: none;
+}
+
+.board-layout-icon,
+.board-layout-icon.icon-font-chess {
+    align-items: center;
+    background-color: transparent;
+    border: none;
+    color: #fff;
+    cursor: pointer;
+    display: flex;
+    font-size: 2rem;
+    height: 2.4rem;
+    justify-content: center;
+    margin: 0;
+    margin-top: -.2rem;
+    opacity: .5;
+    overflow: hidden;
+    padding: 0;
+    text-shadow: .1rem .1rem rgba(49, 46, 43, .4);
+    width: var(--boardControlsWidth)
+}
+
+.board-layout-icon.resize,
+.board-layout-icon.icon-font-chess.resize {
+    bottom: 0;
+    cursor: nwse-resize;
+    display: none;
+    position: absolute
+}
+
+.board-layout-icon.theatre:before,
+.board-layout-icon.icon-font-chess.theatre:before {
+    border: .2rem solid;
+    content: "";
+    display: block;
+    height: 1.1rem;
+    position: relative;
+    top: .2rem;
+    width: var(--gutter)
+}
+
+.board-layout-controls {
+    display: none
+}
+
+@media all and (min-width: 60em) {
+    .board-layout-controls {
+        display: block;
+        grid-column: board-controls;
+        height: var(--boardControlsHeight);
+        margin-top: calc(-1 * var(--playerHeight) - var(--gutterBoardToTopPlayer));
+        width: var(--boardControlsWidth)
+    }
+
+    .board-layout-controls:hover .board-layout-icon.icon-font-chess.resize,
+    .board-layout-controls .board-layout-icon.icon-font-chess.resize.resizing {
+        display: block
+    }
+}
+
+.hide-board-icons .board-layout-controls:not(:hover) .board-layout-icon:not(.circle-gearwheel),
+.board-layout-controls.hide-board-icons:not(:hover) .board-layout-icon:not(.circle-gearwheel) {
+    display: none
+}
+
+body.outside-coords:not(.with-pieces, .real-3d) {
+    --coordinatesGutter: 2rem;
+    --gutterBoardToBottomPlayer: var(--coordinatesGutter);
+    --gutterLeftOfBoard: var(--coordinatesGutter)
+}
+
+@media all and (min-width: 60em) {
+    body.outside-coords:not(.with-pieces, .real-3d) {
+        --coordinatesGutter: 4rem
+    }
+}
+
+body.with-evaluation {
+    --evalAndGutter: min-content
+}
+
+body.with-visible-evaluation {
+    --evalWidth: 2rem;
+    --gutterLeftOfBoard: var(--gutterSmall)
+}
+
+.board-layout-evaluation {
+    display: flex;
+    grid-column: evaluation
+}
+
+.board-layout-evaluation>* {
+    margin-right: calc(var(--gutterLeftOfBoard) + var(--boardWidth) - var(--boardContainerWidth))
+}
+
+@media all and (min-width: 60em) {
+    body.with-evaluation {
+        --evalAndGutter: calc(var(--gutterLeftOfBoard) + var(--evalWidth));
+        --evalWidth: 3rem;
+        --gutterLeftOfBoard: var(--gutterSmall)
+    }
+
+    .board-layout-evaluation {
+        width: var(--evalWidth)
+    }
+
+    .board-layout-evaluation>* {
+        margin: 0 0 0 calc(var(--boardContainerWidth) - var(--boardWidth))
+    }
+}
+
+body.with-pieces {
+    --boardContainerWidthWithPieces: max(var(--boardMinWidth), min(var(--boardMaxWidthWithPieces), var(--boardMaxHeight) * var(--boardHeightToWidthRatio) * 1.1, var(--modifiedBoardWidth, var(--boardMaxHeight) * var(--boardHeightToWidthRatio) * 1.1)));
+    --piecesWidth: calc(var(--boardContainerWidthWithPieces) / 11)
+}
+
+.board-layout-pieces {
+    grid-column: pieces
+}
+
+.with-pieces .board-layout-pieces {
+    margin-left: calc(var(--boardContainerWidth) - var(--boardWidth));
+    width: var(--piecesWidth)
+}
+
+body {
+    --boardLayoutChessboardLeftMargin: auto;
+    --boardLayoutChessboardRightMargin: 0;
+    --boardLayoutChessboardBoardMargin: 0 auto
+}
+
+.board-layout-main {
+    display: flex;
+    flex-direction: column;
+    /* grid-area: top/board-layout; Remove grid-area if not using main grid yet */
+    margin: 0 auto;
+    position: relative;
+    width: min-content
+}
+
+.board-layout-chessboard {
+    display: grid;
+    grid-template-columns: [evaluation] var(--evalAndGutter) [pieces] var(--piecesWidth) [board] var(--boardContainerWidth) [board-controls] var(--boardControlsWidth);
+    margin: var(--gutterBoardToTopPlayer) var(--boardLayoutChessboardRightMargin) var(--gutterBoardToBottomPlayer) var(--boardLayoutChessboardLeftMargin);
+    position: relative
+}
+
+.board-layout-chessboard>* {
+    grid-row: 1
+}
+
+.board-layout-chessboard .board {
+    grid-column: board;
+    height: var(--boardHeight);
+    margin: var(--boardLayoutChessboardBoardMargin);
+    padding-bottom: 0;
+    width: var(--boardWidth)
+}
+
+@media all and (min-width: 60em) {
+    body {
+        --boardLayoutChessboardBoardMargin: 0 0 0 calc(var(--boardContainerWidth) - var(--boardWidth))
+    }
+
+    body .board-layout-chessboard {
+        --chessboard-border-radius: var(--chessboard-rounded-radius)
+    }
+}
+
+.judo_navbar {
+    position: fixed !important;
+    right: 0;
+    top: 0
+}
+
+@media all and (min-width: 60em) {
+    body.with-judo {
+        --judoHeight: 3.25rem
+    }
+}
+
+.board-layout-nav {
+    left: 0;
+    position: absolute;
+    right: 0;
+    top: 0;
+    z-index: 2001
+}
+
+.board-layout-sidebar {
+    display: flex;
+    flex: 1;
+    flex-basis: 0%;
+    flex-direction: column;
+    margin-top: var(--gutter);
+    min-height: var(--sidebarMinHeight);
+    width: 100%
+}
+
+@media all and (min-width: 60em) {
+    .board-layout-sidebar {
+        /* grid-area:top/sidebar; */
+        height: 100%;
+        margin-top: 0
+    }
+
+    .board-layout-nav {
+        position: fixed;
+        right: unset
+    }
+}
+
+body.no-nav {
+    --horizontalNavHeight: 0rem;
+    --verticalNavWidth: 0rem
+}
+
+body.with-analysis {
+    --analysisHeight: 22rem;
+    --gutterBottomPlayerToAnalysis: var(--gutter)
+}
+
+body.with-analysis.with-analysis-collapsed {
+    --analysisHeight: 5rem
+}
+
+.board-layout-analysis {
+    height: var(--analysisHeight);
+    margin: var(--gutterBottomPlayerToAnalysis) var(--boardControlsWidth) 0 0
+}
+
+@media all and (min-width: 60em) {
+    .board-layout-analysis {
+        transform: var(--evalTransform);
+        width: calc(var(--boardContainerWidth) + var(--evalWidth) + var(--gutterLeftOfBoard) + var(--piecesWidth))
+    }
+}
+
+.board-layout-comments {
+    display: none;
+    width: 100%
+}
+
+body.with-comments .board-layout-comments {
+    display: block
+}
+
+body.with-comments .board-layout-comments>div {
+    margin: calc(var(--gutter) * 3) auto;
+    max-width: 72.8rem
+}
+
+@media all and (min-width: 60em) {
+    .board-layout-comments {
+        grid-column: 1/-1;
+        grid-row: bottom
+    }
+
+    .board-layout-comments~* {
+        grid-column: extraneous-dom
+    }
+}
+
+body {
+    --layoutPlayerWidth: min(calc(var(--boardWidth) + var(--bodyBoardGutterX) * 2), calc(var(--100vw) - var(--bodyPeripheralsGutterX) * 2));
+    --layoutPlayerMargin: 0 auto
+}
+
+body.with-players {
+    --gutterBoardToBottomPlayer: var(--gutterSmall);
+    --gutterBoardToTopPlayer: var(--gutterSmall);
+    --playerHeight: 4rem
+}
+
+.board-layout-player {
+    flex-shrink: 0;
+    height: var(--playerHeight);
+    margin: var(--layoutPlayerMargin);
+    position: relative;
+    width: var(--layoutPlayerWidth)
+}
+
+@media all and (min-width: 60em) {
+    body {
+        --layoutPlayerMargin: 0 var(--boardControlsWidth) 0 auto;
+        --layoutPlayerWidth: var(--boardWidth)
+    }
+}
+
+.board-layout-ad {
+    display: none
+}
+
+@media all and (min-width: 75em) {
+    .board-layout-ad {
+        display: block;
+        grid-column: ad;
+        margin-left: var(--gutter)
+    }
+
+    body {
+        --baseAdWidth: 16rem
+    }
+
+    body.with-und {
+        --adWidth: calc(var(--baseAdWidth) + var(--gutter))
+    }
+}
+
+@media (min-aspect-ratio: 2/1) {
+    body {
+        --baseAdWidth: 30rem
+    }
+}

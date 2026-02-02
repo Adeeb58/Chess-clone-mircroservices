@@ -1,0 +1,83 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: api-gateway
+  
+  cloud:
+    gateway:
+      routes:
+        # Auth routes - no authentication required
+        - id: auth-route
+          uri: ${USER_SERVICE_URL:http://localhost:8081}
+          predicates:
+            - Path=/auth/**
+          filters:
+            - RewritePath=/auth/(?<segment>.*), /auth/${segment}
+        
+        # User routes
+        - id: user-route
+          uri: ${USER_SERVICE_URL:http://localhost:8081}
+          predicates:
+            - Path=/users/**
+        
+        # Home route (auth check)
+        - id: home-route
+          uri: ${USER_SERVICE_URL:http://localhost:8081}
+          predicates:
+            - Path=/home
+        
+        # Game routes
+        - id: game-route
+          uri: ${MATCH_SERVICE_URL:http://localhost:8082}
+          predicates:
+            - Path=/game/**
+        
+        # Matchmaking routes
+        - id: matchmaking-route
+          uri: ${MATCH_SERVICE_URL:http://localhost:8082}
+          predicates:
+            - Path=/matchmaking/**
+        
+        # WebSocket route - use http://, Gateway handles WebSocket upgrade
+        - id: websocket-route
+          uri: ${MATCH_SERVICE_URL:http://localhost:8082}
+          predicates:
+            - Path=/ws/**
+      
+      globalcors:
+        corsConfigurations:
+          '[/**]':
+            allowedOrigins: "http://localhost:3000"
+            allowedMethods:
+              - GET
+              - POST
+              - PUT
+              - DELETE
+              - OPTIONS
+            allowedHeaders: "*"
+            allowCredentials: true
+            maxAge: 3600
+      
+      # Deduplicate CORS headers that may be added by backend services
+      default-filters:
+        - DedupeResponseHeader=Access-Control-Allow-Origin Access-Control-Allow-Credentials, RETAIN_UNIQUE
+
+jwt:
+  secret: ${JWT_SECRET:mySecretKeyForJWTTokenGenerationThatIsAtLeast256BitsLong}
+
+# Routes that don't require authentication
+gateway:
+  open-routes:
+    - /auth/login
+    - /auth/register
+    - /actuator/health
+    - /home
+    - /ws/**
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,gateway

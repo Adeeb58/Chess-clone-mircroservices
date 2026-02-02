@@ -1,0 +1,123 @@
+.new-game-container {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 20px;
+    background-color: #262421;
+    /* Dark background matching theme */
+    height: 100%;
+    color: white;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, Helvetica, Arial, sans-serif;
+}
+
+.btn-find-match {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border: none;
+    padding: 20px;
+    font-size: 1.5rem;
+    font-weight: bold;
+    border-radius: 5px;
+    cursor: pointer;
+    box-shadow: 0 4px 0 0 #5a3d8a;
+    margin-bottom: 20px;
+    transition: transform 0.1s, box-shadow 0.1s;
+    text-shadow: 0 1px 0 rgba(0, 0, 0, 0.2);
+}
+
+.btn-find-match:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 0 0 #5a3d8a;
+}
+
+.btn-find-match:active {
+    transform: translateY(4px);
+    box-shadow: 0 0 0 0 #5a3d8a;
+}
+
+.btn-back {
+    background-color: #403d39;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 1rem;
+    font-weight: 600;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    align-self: flex-start;
+}
+
+.btn-back:hover {
+    background-color: #4f4c48;
+}
+
+.time-control-select {
+    background-color: #302e2b;
+    color: white;
+    border: 1px solid #403d39;
+    border-radius: 5px;
+    padding: 15px;
+    font-size: 1.2rem;
+    width: 100%;
+    cursor: pointer;
+    appearance: none;
+    /* simple removal of default arrow if needed, or keep it */
+    margin-bottom: 10px;
+    font-weight: 600;
+    background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23FFFFFF%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E");
+    background-repeat: no-repeat;
+    background-position: right 15px top 50%;
+    background-size: 12px auto;
+}
+
+.btn-start-game {
+    background-color: #81b64c;
+    color: white;
+    border: none;
+    padding: 20px;
+    font-size: 1.5rem;
+    font-weight: bold;
+    border-radius: 5px;
+    cursor: pointer;
+    box-shadow: 0 4px 0 0 #457524;
+    margin-bottom: 20px;
+    transition: transform 0.1s, box-shadow 0.1s;
+    text-shadow: 0 1px 0 rgba(0, 0, 0, 0.2);
+}
+
+.btn-start-game:active {
+    transform: translateY(4px);
+    box-shadow: 0 0 0 0 #457524;
+}
+
+.secondary-options {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.btn-secondary {
+    background-color: #403d39;
+    color: #ccc;
+    border: none;
+    padding: 15px;
+    font-size: 1rem;
+    font-weight: 600;
+    border-radius: 5px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    transition: background-color 0.2s, color 0.2s;
+}
+
+.btn-secondary:hover {
+    background-color: #4f4c48;
+    color: white;
+}
+
+.icon-placeholder {
+    font-size: 1.2rem;
+}
