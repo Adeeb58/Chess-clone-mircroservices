@@ -2,16 +2,7 @@
 
 A real-time multiplayer chess application built with Spring Boot Microservices and React.
 
-![Home Screen](screenshots/home-light.png)
-
-## Screenshots
-<p float="left">
-  <img src="screenshots/game-start.png" width="45%" />
-  <img src="screenshots/game-mid.png" width="45%" /> 
-</p>
-<p float="left">
-  <img src="screenshots/game-moves.png" width="45%" />
-</p>
+![Gameplay](screenshots/gameplay-1.png)
 
 ## Features
 
@@ -75,3 +66,29 @@ A real-time multiplayer chess application built with Spring Boot Microservices a
 - `/backend` - Spring Boot Microservices
 - `/frontend` - React Application
 - `/screenshots` - Project Images
+
+## API Reference
+
+All API requests should be prefixed with the Gateway URL: `http://localhost:8080`
+
+### Authentication (User Service)
+
+| Method | Endpoint          | Description            | Body |
+| :---   | :---              | :---                   | :--- |
+| `POST` | `/auth/register`  | Register a new user    | `{"username": "user", "password": "pw", "email": "e@mail.com"}` |
+| `POST` | `/auth/login`     | Login & get JWT token  | `{"username": "user", "password": "pw"}` |
+| `GET`  | `/home`           | Test protected route   | Headers: `Authorization: Bearer <token>` |
+
+### Matchmaking & Game (Match Service)
+
+| Method | Endpoint               | Description                           | Headers/Body |
+| :---   | :---                   | :---                                  | :--- |
+| `POST` | `/game`                | Create or Join a game (Matchmaking)   | Headers: `Authorization: Bearer <token>` |
+| `GET`  | `/game/check-match`    | Poll for match status                 | Headers: `Authorization: Bearer <token>` |
+| `GET`  | `/game/{gameId}`       | Get current game state                | Headers: `Authorization: Bearer <token>` |
+| `POST` | `/game/move/{gameId}`  | Make a move                           | Body: `{"from": "e2", "to": "e4", "promotion": ""}` |
+
+### WebSocket (Real-time Updates)
+
+- **Endpoint:** `ws://localhost:8080/ws`
+- **Topic:** `/topic/game/{gameId}` - Subscribe for real-time game moves and updates.
