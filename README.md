@@ -2,7 +2,16 @@
 
 A real-time multiplayer chess application built with Spring Boot Microservices and React.
 
-![Gameplay](screenshots/gameplay-1.png)
+![Home Screen](screenshots/home-light.png)
+
+## Screenshots
+<p float="left">
+  <img src="screenshots/game-start.png" width="45%" />
+  <img src="screenshots/game-mid.png" width="45%" /> 
+</p>
+<p float="left">
+  <img src="screenshots/game-moves.png" width="45%" />
+</p>
 
 ## Features
 
